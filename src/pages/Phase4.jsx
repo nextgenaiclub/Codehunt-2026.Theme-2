@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Bug, Check, AlertCircle, ArrowRight, Lightbulb, Key } from 'lucide-react'
+import { Bug, Check, AlertCircle, Lightbulb, Key } from 'lucide-react'
 import { API_URL } from '../App'
 
 export default function Phase4({ team, setTeam }) {
-    const navigate = useNavigate()
     const [code, setCode] = useState('')
-    const [roomNumber, setRoomNumber] = useState('')
+    const [answer, setAnswer] = useState('')
     const [loading, setLoading] = useState(true)
     const [submitting, setSubmitting] = useState(false)
     const [result, setResult] = useState(null)
@@ -40,7 +38,6 @@ export default function Phase4({ team, setTeam }) {
             <div className="container" style={{ textAlign: 'center', padding: '60px 0' }}>
                 <AlertCircle size={60} style={{ color: '#FFD700', marginBottom: '20px' }} />
                 <h2>Please Register First</h2>
-                <button onClick={() => navigate('/phase1')} className="btn btn-primary">Go to Phase 1</button>
             </div>
         )
     }
@@ -49,9 +46,9 @@ export default function Phase4({ team, setTeam }) {
         return (
             <div className="container" style={{ textAlign: 'center', padding: '60px 0' }}>
                 <div className="success-icon"><Key size={60} /></div>
-                <h2 style={{ color: '#22c55e', marginBottom: '20px' }}>Room 305 Unlocked!</h2>
+                <h2 style={{ color: '#22c55e', marginBottom: '20px' }}>Code Debugged Successfully!</h2>
                 <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>
-                    You successfully debugged the code and found the room number!
+                    You fixed all the bugs and found the correct output!
                 </p>
                 <div style={{
                     display: 'inline-block',
@@ -62,14 +59,12 @@ export default function Phase4({ team, setTeam }) {
                     marginBottom: '40px'
                 }}>
                     <p style={{ color: '#FFD700', fontFamily: 'Orbitron', fontSize: '0.9rem', marginBottom: '10px' }}>
-                        YOUR DESTINATION
+                        📍 NEXT LOCATION
                     </p>
-                    <h1 style={{ fontSize: '4rem', margin: 0 }}>305</h1>
+                    <h1 style={{ fontSize: '2rem', margin: 0 }}>Room 2101 & 2012 Labs</h1>
                 </div>
                 <br />
-                <button onClick={() => navigate('/phase5')} className="btn btn-primary btn-large">
-                    Proceed to Phase 5 <ArrowRight size={20} />
-                </button>
+                <p style={{ color: '#FFD700', fontSize: '1.1rem' }}>Scan the next QR code to continue.</p>
             </div>
         )
     }
@@ -79,9 +74,19 @@ export default function Phase4({ team, setTeam }) {
             <div className="container" style={{ textAlign: 'center', padding: '60px 0' }}>
                 <div className="success-icon"><Check size={60} /></div>
                 <h2 style={{ color: '#22c55e', marginBottom: '20px' }}>Phase 4 Completed!</h2>
-                <button onClick={() => navigate(`/phase${team.currentPhase}`)} className="btn btn-primary">
-                    Continue to Phase {team.currentPhase}
-                </button>
+                <div style={{
+                    display: 'inline-block',
+                    padding: '20px 40px',
+                    background: 'rgba(255, 215, 0, 0.1)',
+                    border: '2px solid #FFD700',
+                    borderRadius: '15px',
+                    marginTop: '20px'
+                }}>
+                    <p style={{ color: '#FFD700', fontFamily: 'Orbitron', fontSize: '0.85rem', marginBottom: '8px' }}>
+                        📍 NEXT LOCATION
+                    </p>
+                    <h2 style={{ fontSize: '1.5rem', margin: 0, color: '#fff' }}>Room 2101 & 2012 Labs</h2>
+                </div>
             </div>
         )
     }
@@ -91,15 +96,13 @@ export default function Phase4({ team, setTeam }) {
             <div className="container" style={{ textAlign: 'center', padding: '60px 0' }}>
                 <AlertCircle size={60} style={{ color: '#FFD700', marginBottom: '20px' }} />
                 <h2>Phase Locked</h2>
-                <button onClick={() => navigate(`/phase${team.currentPhase}`)} className="btn btn-primary">
-                    Go to Phase {team.currentPhase}
-                </button>
+                <p>Complete the previous phase first.</p>
             </div>
         )
     }
 
     const handleSubmit = async () => {
-        if (!roomNumber.trim()) return
+        if (!answer.trim()) return
 
         setSubmitting(true)
 
@@ -107,7 +110,7 @@ export default function Phase4({ team, setTeam }) {
             const res = await fetch(`${API_URL}/phase4/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ teamId: team.teamId, roomNumber })
+                body: JSON.stringify({ teamId: team.teamId, answer })
             })
             const data = await res.json()
 
@@ -178,7 +181,7 @@ export default function Phase4({ team, setTeam }) {
                 </h3>
                 <p style={{ marginBottom: '20px' }}>
                     This code contains <strong style={{ color: '#FFD700' }}>3 bugs</strong>.
-                    Find them, fix them mentally, and determine what room number the corrected code will print.
+                    Find them, fix them mentally, and determine the correct output of the fixed code.
                 </p>
 
                 <div className="code-block" style={{ marginBottom: '0' }}>
@@ -201,7 +204,7 @@ export default function Phase4({ team, setTeam }) {
             <div className="card">
                 <h3 style={{ marginBottom: '20px' }}>
                     <Key size={20} style={{ marginRight: '10px' }} />
-                    Enter the Room Number
+                    Enter the Correct Output
                 </h3>
 
                 {result && !result.success && (
@@ -218,19 +221,19 @@ export default function Phase4({ team, setTeam }) {
                 )}
 
                 <div className="form-group">
-                    <label className="form-label">Room Number</label>
+                    <label className="form-label">Output</label>
                     <input
                         type="text"
                         className="form-input"
-                        placeholder="Enter the room number"
-                        value={roomNumber}
-                        onChange={(e) => setRoomNumber(e.target.value)}
+                        placeholder="Enter the correct output"
+                        value={answer}
+                        onChange={(e) => setAnswer(e.target.value)}
                         style={{ maxWidth: '300px' }}
                     />
                 </div>
 
                 <button onClick={handleSubmit} className="btn btn-primary" disabled={submitting}>
-                    {submitting ? 'Checking...' : 'Submit Room Number'}
+                    {submitting ? 'Checking...' : 'Submit Answer'}
                 </button>
             </div>
 

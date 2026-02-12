@@ -50,9 +50,21 @@ const upload = multer({
 let db;
 let useFirebase = false;
 
-// Check if Firebase credentials file exists
+// Check if Firebase credentials file exists or env var is set
 const serviceAccountPath = path.join(__dirname, 'firebase-credentials.json');
-if (fs.existsSync(serviceAccountPath)) {
+if (process.env.FIREBASE_CREDENTIALS) {
+    try {
+        const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+        });
+        db = admin.firestore();
+        useFirebase = true;
+        console.log('✅ Firebase Firestore connected via env variable!');
+    } catch (error) {
+        console.error('❌ Firebase env parse error:', error.message);
+    }
+} else if (fs.existsSync(serviceAccountPath)) {
     try {
         const serviceAccount = require(serviceAccountPath);
         admin.initializeApp({
@@ -267,82 +279,62 @@ async function getStats() {
 const phase2Questions = [
     {
         id: 1,
-        question: "What is Artificial Intelligence?",
-        options: [
-            "Only robots that look like humans",
-            "Computer systems that can perform tasks requiring human intelligence",
-            "A programming language",
-            "A type of hardware"
-        ],
-        correctAnswer: 1
+        question: "Which algorithm technique solves problems by breaking them into subproblems?",
+        options: ["Divide and Conquer", "Random Search", "Greedy Avoidance", "Brute Force"],
+        correctAnswer: 0
     },
     {
         id: 2,
-        question: "What is the main difference between AI and Machine Learning?",
-        options: [
-            "They are exactly the same",
-            "ML is a subset of AI that learns from data",
-            "AI is newer than ML",
-            "ML only works with images"
-        ],
+        question: "Which data structure uses FIFO?",
+        options: ["Heap", "Queue", "Graph", "Stack"],
         correctAnswer: 1
     },
     {
         id: 3,
-        question: "Which type of AI can perform only specific tasks?",
-        options: ["General AI", "Super AI", "Narrow AI", "Broad AI"],
+        question: "What does CPU stand for?",
+        options: ["Control Program Utility", "Computer Personal Unit", "Central Processing Unit", "Central Process Unit"],
         correctAnswer: 2
     },
     {
         id: 4,
-        question: "Which is a real-world application of AI?",
-        options: ["Netflix recommendations", "Manual data entry", "Traditional calculators", "Pen and paper"],
-        correctAnswer: 0
+        question: "Which sorting algorithm has average complexity O(n log n)?",
+        options: ["Selection Sort", "Bubble Sort", "Insertion Sort", "Merge Sort"],
+        correctAnswer: 3
     },
     {
         id: 5,
-        question: "What is Machine Learning?",
-        options: [
-            "Robots learning to walk",
-            "Systems that improve through experience and data",
-            "Teaching machines manually",
-            "A type of computer hardware"
-        ],
+        question: "What is the binary representation of decimal 10?",
+        options: ["1110", "1010", "1001", "1100"],
         correctAnswer: 1
     },
     {
         id: 6,
-        question: "In Supervised Learning, what do we provide to the algorithm?",
-        options: ["No data at all", "Labeled data with correct answers", "Only images", "Random numbers"],
-        correctAnswer: 1
-    },
-    {
-        id: 7,
-        question: "Which AI technology powers voice assistants like Alexa and Siri?",
-        options: ["Image Recognition", "Natural Language Processing", "Game Theory", "Robotics only"],
-        correctAnswer: 1
-    },
-    {
-        id: 8,
-        question: "What is a 'dataset' in AI/ML?",
-        options: [
-            "A collection of data used for training models",
-            "A type of computer",
-            "A programming error",
-            "A database software"
-        ],
+        question: "Which layer of the OSI model handles routing?",
+        options: ["Network", "Transport", "Session", "Presentation"],
         correctAnswer: 0
     },
     {
+        id: 7,
+        question: "A primary key must be:",
+        options: ["Repeated", "Optional", "Encrypted", "Unique"],
+        correctAnswer: 3
+    },
+    {
+        id: 8,
+        question: "Which language is primarily used for web page structure?",
+        options: ["Python", "C++", "HTML", "Java"],
+        correctAnswer: 2
+    },
+    {
         id: 9,
-        question: "ChatGPT is an example of which AI application?",
-        options: ["Image generation", "Language model / Conversational AI", "Self-driving cars", "Weather prediction"],
-        correctAnswer: 1
+        question: "What is recursion?",
+        options: ["Memory deletion", "Parallel computing", "Loop unrolling", "Function calling itself"],
+        correctAnswer: 3
     },
     {
         id: 10,
-        question: "What is an ethical concern with AI?",
-        options: ["AI is too colorful", "Bias and fairness in AI decisions", "AI uses electricity", "AI requires computers"],
+        question: "Which memory is volatile?",
+        options: ["Hard Disk", "RAM", "SSD", "ROM"],
         correctAnswer: 1
     }
 ];
@@ -351,52 +343,38 @@ const phase2Questions = [
 const phase3Questions = [
     {
         id: 1,
-        code: `int i, sum = 0;
-for(i = 1; i <= 5; i++) {
-    sum = sum + i;
-}
-printf("%d", sum);`,
-        options: ["10", "15", "20", "5"],
+        code: `#iclude <stdio.h>\nint main() {\n    float result = (5 + 3 * 2;\n    printf("%d", result);\n    return 0;\n}`,
+        question: "What will be the correct output after fixing all errors?",
+        options: ["16.000000", "11.000000", "11", "Error"],
         correctAnswer: 1
     },
     {
         id: 2,
-        code: `int x = 10, y = 20;
-if(x > y) {
-    printf("A");
-} else {
-    printf("B");
-}`,
-        options: ["A", "B", "AB", "Error"],
+        code: `#include <stdio.h>\nint main() {\n    double x = 110.9807;\n    prinf("Value: %f", x);\n    return 0;\n}`,
+        question: "What will be the correct output after fixing all errors?",
+        options: ["Value: 110.9807", "Value: 110.980700", "110.980700", "Error"],
         correctAnswer: 1
     },
     {
         id: 3,
-        code: `int arr[] = {2, 4, 6, 8, 10};
-printf("%d", arr[3]);`,
-        options: ["6", "8", "10", "4"],
+        code: `#include <stdio.h>\nint main() [\n    int x = 5\n    printf("%d", x);\n    return 0;\n}`,
+        question: "What will be the correct output after fixing all errors?",
+        options: ["0", "5", "x", "Error"],
         correctAnswer: 1
     },
     {
         id: 4,
-        code: `int a = 5;
-printf("%d ", a++);
-printf("%d", a);`,
-        options: ["5 6", "6 6", "5 5", "6 7"],
-        correctAnswer: 0
+        code: `#include <stdio.h>\nint main() {\n    int n, i;\n    printf("Enter number: ");\n    scanf("%d", &n)\n    for(i = 1; i <= 10; i++) {\n    printf("%d x %d = %d\\n", n, i, n*i);\n    return 0;\n}`,
+        question: "How many errors need to be fixed in this code?",
+        options: ["1", "2", "3", "4"],
+        correctAnswer: 1
     },
     {
         id: 5,
-        code: `int i, j;
-for(i = 1; i <= 3; i++) {
-    for(j = 1; j <= i; j++) {
-        printf("*");
-    }
-    printf("\\n");
-}`,
-        question: "Count total stars printed:",
-        options: ["3 stars", "6 stars", "9 stars", "Error"],
-        correctAnswer: 1
+        code: `#include <studio.h>\nint main() {\n    int a = 10, b = 20, sum;\n    sum = a + b\n    printf("Sum = %d", sum);\n    retrn 0;\n}`,
+        question: "What will be the correct output after fixing all errors?",
+        options: ["Sum = 10", "Sum = 20", "Sum = 30", "Error"],
+        correctAnswer: 2
     }
 ];
 
@@ -404,59 +382,55 @@ for(i = 1; i <= 3; i++) {
 const phase4Code = `#include <stdio.h>
 
 int main() {
-    int a = 10, b = 5, result
-    
-    result = a * b - 15;
-    
-    if(result = 30) {
-        printf("Room Number: 305");
-    } else {
-        printf("Room Number: 404")
+    int num = 100;
+
+    if (num = 100) {
+        printf("Matched")
     }
-    
-    return 0;
+
+    retrn 0;
 }`;
 
 const phase4Hints = [
-    "Check for missing semicolons",
     "Look at the if condition - is it comparing or assigning?",
-    "Count all semicolons needed"
+    "Check for missing semicolons after printf",
+    "Is 'retrn' a valid keyword?"
 ];
 
-// Phase 5 Riddles
+// Phase 5 Riddles - 1st Year Engineering Level
 const phase5Riddles = [
     {
         id: 1,
-        type: "mcq",
-        riddle: "I learn from examples but never forget. I find patterns in data you haven't seen yet. What am I?",
-        options: ["A teacher", "Machine Learning Algorithm", "A database", "A calculator"],
-        correctAnswer: 1
+        type: "text",
+        riddle: "I mark the end of every string in C, yet I am worth nothing. What character am I? (e.g. '\\n')",
+        acceptedAnswers: ["\\0", "null character", "null terminator", "null", "'\\0'"]
     },
     {
         id: 2,
-        type: "text",
-        riddle: "Decode: AI = Artificial Intelligence, ML = Machine Learning, NN = ?",
-        acceptedAnswers: ["neural network", "neural networks", "neuralnetwork", "neuralnetworks"]
+        type: "mcq",
+        riddle: "I follow the Last-In, First-Out (LIFO) principle. Push me, Pop me. What Data Structure am I?",
+        options: ["Queue", "Array", "Stack", "Linked List"],
+        correctAnswer: 2
     },
     {
         id: 3,
         type: "mcq",
-        riddle: "Complete the sequence: 2, 4, 8, 16, __",
-        options: ["20", "24", "32", "64"],
+        riddle: "If Input A is 1 and Input B is 1, my output is 0. But if only one is 1, I say 1. Which Logic Gate am I?",
+        options: ["AND", "OR", "XOR", "NAND"],
         correctAnswer: 2
     },
     {
         id: 4,
         type: "text",
-        riddle: "I have no consciousness but can chat like a human. I was trained on text from the internet. What type of AI am I?",
-        acceptedAnswers: ["language model", "llm", "chatbot", "conversational ai", "languagemodel", "large language model"]
+        riddle: "In C, if you declare int arr[5], what is the index of the very last element?",
+        acceptedAnswers: ["4", "four", "index 4"]
     },
     {
         id: 5,
         type: "mcq",
-        riddle: "In VU's campus, where does innovation meet collaboration, and NextGen minds code the future?",
-        options: ["Library", "Computer Lab", "Cafeteria", "Sports Ground"],
-        correctAnswer: 1
+        riddle: "Which loop is guaranteed to execute its body at least once, even if the condition is false initially?",
+        options: ["for loop", "while loop", "do-while loop", "recursive loop"],
+        correctAnswer: 2
     }
 ];
 
@@ -492,8 +466,8 @@ app.post('/api/teams/register', async (req, res) => {
 
         // Validate team members (2-4)
         const members = teamMembers.split(',').map(m => m.trim()).filter(m => m);
-        if (members.length < 2 || members.length > 4) {
-            return res.status(400).json({ error: 'Team must have 2-4 members' });
+        if (members.length < 3 || members.length > 4) {
+            return res.status(400).json({ error: 'Team must have 3-4 members' });
         }
 
         // Check if team name already exists
@@ -567,7 +541,64 @@ app.get('/api/phase2/questions', (req, res) => {
     res.json(questionsWithoutAnswers);
 });
 
-// Submit Phase 2 answers
+// Check single Phase 2 answer
+app.post('/api/phase2/check-answer', (req, res) => {
+    try {
+        const body = req.body || {};
+        const questionIndex = body.questionIndex;
+        const answer = body.answer;
+
+        if (questionIndex == null || answer == null) {
+            return res.status(400).json({ error: 'questionIndex and answer are required' });
+        }
+
+        if (questionIndex < 0 || questionIndex >= phase2Questions.length) {
+            return res.status(400).json({ error: 'Invalid question index' });
+        }
+
+        const question = phase2Questions[questionIndex];
+        const correct = answer === question.correctAnswer;
+
+        res.json({ success: true, correct });
+    } catch (error) {
+        console.error('Phase 2 check-answer error:', error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Complete Phase 2 (all questions answered correctly)
+app.post('/api/phase2/complete', async (req, res) => {
+    try {
+        const { teamId } = req.body;
+
+        const team = await getTeamById(teamId);
+        if (!team) {
+            return res.status(404).json({ error: 'Team not found' });
+        }
+
+        if (team.phase2?.completed) {
+            return res.status(400).json({ error: 'Phase 2 already completed' });
+        }
+
+        await saveTeam(teamId, {
+            phase2: {
+                score: phase2Questions.length,
+                timestamp: new Date().toISOString(),
+                completed: true
+            },
+            currentPhase: 3
+        });
+
+        console.log(`📝 Phase 2 - Team: ${team.teamName} completed all questions correctly!`);
+
+        res.json({ success: true, message: 'Phase 2 completed!' });
+    } catch (error) {
+        console.error('Phase 2 complete error:', error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Submit Phase 2 answers (legacy)
 app.post('/api/phase2/submit', async (req, res) => {
     try {
         const { teamId, answers } = req.body;
@@ -610,7 +641,8 @@ app.post('/api/phase2/submit', async (req, res) => {
                 attempts: newAttempts,
                 lastScore: score,
                 timestamp: new Date().toISOString(),
-                completed: passed
+                completed: passed,
+                answers: answers
             }
         };
 
@@ -679,30 +711,25 @@ app.post('/api/phase3/submit', async (req, res) => {
             };
         });
 
-        const passed = score >= 3;
-
-        // Use nested object structure for Firebase
+        // No minimum score required - completing the phase is enough
         const updateData = {
             phase3: {
                 score: score,
                 answers: answers,
                 timestamp: new Date().toISOString(),
-                completed: passed
-            }
+                completed: true
+            },
+            currentPhase: 4
         };
-
-        if (passed) {
-            updateData.currentPhase = 4;
-        }
 
         await saveTeam(teamId, updateData);
 
-        console.log(`💻 Phase 3 - Team: ${team.teamName}, Score: ${score}/5, Passed: ${passed}`);
+        console.log(`💻 Phase 3 - Team: ${team.teamName}, Score: ${score}/5, Completed!`);
 
         res.json({
             success: true,
             score,
-            passed,
+            passed: true,
             results,
             questions: phase3Questions
         });
@@ -720,7 +747,7 @@ app.get('/api/phase4/code', (req, res) => {
 // Submit Phase 4 answer
 app.post('/api/phase4/submit', async (req, res) => {
     try {
-        const { teamId, roomNumber } = req.body;
+        const { teamId, answer } = req.body;
 
         const team = await getTeamById(teamId);
         if (!team) {
@@ -736,25 +763,26 @@ app.post('/api/phase4/submit', async (req, res) => {
         }
 
         const attempts = (team.phase4?.attempts || 0) + 1;
-        const isCorrect = roomNumber.trim() === '305';
+        const isCorrect = answer && answer.trim().toLowerCase() === 'matched';
 
         if (isCorrect) {
             await saveTeam(teamId, {
                 phase4: {
                     attempts: attempts,
-                    roomNumber: roomNumber,
+                    answer: answer.trim(),
                     timestamp: new Date().toISOString(),
                     completed: true
                 },
                 currentPhase: 5
             });
 
-            console.log(`🔓 Phase 4 - Team: ${team.teamName} found room 305!`);
+            console.log(`🔓 Phase 4 - Team: ${team.teamName} solved the buggy code!`);
 
             return res.json({
                 success: true,
                 correct: true,
-                message: 'Correct! Room Number 305 unlocked!'
+                message: 'Correct! The next treasure is at Room 2012!',
+                room: '2012'
             });
         }
 
@@ -771,7 +799,7 @@ app.post('/api/phase4/submit', async (req, res) => {
             correct: false,
             attempts,
             hint,
-            message: 'Incorrect room number. Try again!'
+            message: 'Incorrect output. Try again!'
         });
     } catch (error) {
         console.error('Phase 4 submit error:', error.message);
@@ -840,9 +868,7 @@ app.post('/api/phase5/complete', async (req, res) => {
             return res.status(400).json({ error: 'Not on Phase 5' });
         }
 
-        if (score < 4) {
-            return res.status(400).json({ error: 'Need at least 4/5 correct answers' });
-        }
+
 
         await saveTeam(teamId, {
             phase5: {
@@ -867,7 +893,7 @@ app.post('/api/phase5/complete', async (req, res) => {
 });
 
 // Submit Phase 6 (Final)
-app.post('/api/phase6/submit', upload.single('photo'), async (req, res) => {
+app.post('/api/phase6/submit', upload.none(), async (req, res) => {
     try {
         const { teamId, locationAnswer } = req.body;
 
@@ -884,23 +910,19 @@ app.post('/api/phase6/submit', upload.single('photo'), async (req, res) => {
             return res.status(400).json({ error: 'Already completed' });
         }
 
-        if (!req.file) {
-            return res.status(400).json({ error: 'Photo is required' });
-        }
-
         const now = new Date();
         const startTime = new Date(team.startTime);
         const totalTimeSeconds = Math.floor((now - startTime) / 1000);
 
         await saveTeam(teamId, {
             phase6: {
-                photoPath: req.file.filename,
                 locationAnswer: locationAnswer,
                 timestamp: now.toISOString(),
                 completed: true
             },
             totalTimeSeconds,
-            finalCompletionTime: now.toISOString()
+            finalCompletionTime: now.toISOString(),
+            currentPhase: 7 // Completed
         });
 
         console.log(`🏆 COMPLETED - Team: ${team.teamName}, Total Time: ${totalTimeSeconds}s`);
@@ -1004,6 +1026,18 @@ app.delete('/api/admin/clear-all', async (req, res) => {
         res.status(500).json({ error: 'Failed to clear teams' });
     }
 });
+
+// Serve frontend in production
+const frontendPath = path.join(__dirname, '..', 'dist');
+if (fs.existsSync(frontendPath)) {
+    app.use(express.static(frontendPath));
+    // SPA fallback - serve index.html for all non-API routes
+    app.get('*', (req, res) => {
+        if (!req.path.startsWith('/api')) {
+            res.sendFile(path.join(frontendPath, 'index.html'));
+        }
+    });
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

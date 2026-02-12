@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Rocket, Users, Clock, Trophy, ChevronRight, Sparkles } from 'lucide-react'
+import { Rocket, Users, Clock, Trophy, Sparkles } from 'lucide-react'
+import { API_URL } from '../App'
 
 export default function LandingPage({ team, setTeam }) {
     const navigate = useNavigate()
@@ -8,14 +9,6 @@ export default function LandingPage({ team, setTeam }) {
     const [resumeTeamName, setResumeTeamName] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
-
-    const handleStart = () => {
-        if (team) {
-            navigate(`/phase${team.currentPhase}`)
-        } else {
-            navigate('/phase1')
-        }
-    }
 
     const handleResume = async () => {
         if (!resumeTeamName.trim()) {
@@ -27,7 +20,7 @@ export default function LandingPage({ team, setTeam }) {
         setError('')
 
         try {
-            const res = await fetch(`http://localhost:5000/api/teams/${resumeTeamName}`)
+            const res = await fetch(`${API_URL}/teams/${resumeTeamName}`)
             const data = await res.json()
 
             if (!res.ok) {
@@ -37,7 +30,7 @@ export default function LandingPage({ team, setTeam }) {
             }
 
             setTeam(data)
-            navigate(`/phase${data.currentPhase}`)
+            setShowResume(false)
         } catch (err) {
             setError('Failed to connect to server')
         }
@@ -67,7 +60,7 @@ export default function LandingPage({ team, setTeam }) {
 
                 {/* Phase Preview Cards */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '50px' }}>
-                    <PhaseCard icon={<Sparkles />} num={1} title="AI Image Generation" desc="Create futuristic VU 2050 images" />
+                    <PhaseCard icon={<Sparkles />} num={1} title="AI Video Generation" desc="Create futuristic VU 2050 videos" />
                     <PhaseCard icon={<Trophy />} num={2} title="AI Quiz Challenge" desc="Test your AI fundamentals" />
                     <PhaseCard icon={<Rocket />} num={3} title="Code Output Prediction" desc="Predict what the code outputs" />
                     <PhaseCard icon={<Users />} num={4} title="Debug the Room" desc="Fix bugs to find the room" />
@@ -77,30 +70,38 @@ export default function LandingPage({ team, setTeam }) {
 
                 {/* CTA Buttons */}
                 <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '30px' }}>
-                    <button onClick={handleStart} className="btn btn-primary btn-large">
-                        {team ? `Continue Phase ${team.currentPhase}` : 'Start Competition'}
-                        <ChevronRight size={24} />
-                    </button>
-
                     {!team && (
-                        <button onClick={() => setShowResume(!showResume)} className="btn btn-secondary btn-large">
-                            Resume Progress
-                        </button>
+                        <>
+                            <button onClick={() => navigate('/phase1')} className="btn btn-primary btn-large">
+                                Register New Team
+                            </button>
+                            <button onClick={() => setShowResume(!showResume)} className="btn btn-secondary btn-large">
+                                Resume Progress
+                            </button>
+                        </>
                     )}
 
                     {team && (
-                        <button
-                            onClick={() => {
-                                if (window.confirm('Are you sure? This will clear your current session and let you register a new team.')) {
-                                    localStorage.removeItem('codehunt_team');
-                                    setTeam(null);
-                                }
-                            }}
-                            className="btn btn-secondary btn-large"
-                            style={{ borderColor: '#ef4444', color: '#ef4444' }}
-                        >
-                            Start Fresh
-                        </button>
+                        <>
+                            <div style={{ padding: '15px 30px', background: 'rgba(255, 215, 0, 0.1)', border: '2px solid #FFD700', borderRadius: '12px' }}>
+                                <p style={{ color: '#FFD700', fontFamily: 'Orbitron', margin: 0 }}>
+                                    Team: {team.teamName} — Phase {team.currentPhase}
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    if (window.confirm('Are you sure? This will clear your current session and let you register a new team.')) {
+                                        localStorage.removeItem('codehunt_team');
+                                        setTeam(null);
+                                        navigate('/phase1');
+                                    }
+                                }}
+                                className="btn btn-secondary btn-large"
+                                style={{ borderColor: '#ef4444', color: '#ef4444' }}
+                            >
+                                Start Fresh
+                            </button>
+                        </>
                     )}
                 </div>
 

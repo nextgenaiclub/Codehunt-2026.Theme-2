@@ -7,11 +7,11 @@ import Phase3 from './pages/Phase3'
 import Phase4 from './pages/Phase4'
 import Phase5 from './pages/Phase5'
 import Phase6 from './pages/Phase6'
-import Leaderboard from './pages/Leaderboard'
+
 import Admin from './pages/Admin'
 import Layout from './components/Layout'
 
-export const API_URL = 'http://localhost:5000/api'
+export const API_URL = import.meta.env.VITE_API_URL || '/api'
 
 function App() {
   const [team, setTeam] = useState(() => {
@@ -25,6 +25,18 @@ function App() {
     }
   }, [team])
 
+  // Re-fetch team data from server on load to sync localStorage with latest state
+  useEffect(() => {
+    if (team && team.teamName) {
+      fetch(`${API_URL}/teams/${team.teamName}`)
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data) setTeam(data)
+        })
+        .catch(() => {})
+    }
+  }, [])
+
   return (
     <Layout team={team}>
       <Routes>
@@ -35,7 +47,7 @@ function App() {
         <Route path="/phase4" element={<Phase4 team={team} setTeam={setTeam} />} />
         <Route path="/phase5" element={<Phase5 team={team} setTeam={setTeam} />} />
         <Route path="/phase6" element={<Phase6 team={team} setTeam={setTeam} />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
+
         <Route path="/admin" element={<Admin />} />
       </Routes>
     </Layout>

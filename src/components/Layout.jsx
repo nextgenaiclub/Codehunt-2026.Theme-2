@@ -11,7 +11,7 @@ export default function Layout({ children, team }) {
                     </Link>
                     <div className="nav-links">
                         <Link to="/" className="nav-link">Home</Link>
-                        <Link to="/leaderboard" className="nav-link">Leaderboard</Link>
+
                         {team && <span className="nav-link" style={{ color: '#FFD700' }}>Team: {team.teamName}</span>}
                     </div>
                 </div>

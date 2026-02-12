@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Code, Clock, Check, X, AlertCircle, ArrowRight, RotateCcw } from 'lucide-react'
+import { Code, Clock, Check, X, AlertCircle, RotateCcw } from 'lucide-react'
 import { API_URL } from '../App'
 
 export default function Phase3({ team, setTeam }) {
-    const navigate = useNavigate()
     const [questions, setQuestions] = useState([])
     const [answers, setAnswers] = useState({})
     const [timeLeft, setTimeLeft] = useState(480) // 8 minutes
@@ -94,7 +92,6 @@ export default function Phase3({ team, setTeam }) {
             <div className="container" style={{ textAlign: 'center', padding: '60px 0' }}>
                 <AlertCircle size={60} style={{ color: '#FFD700', marginBottom: '20px' }} />
                 <h2>Please Register First</h2>
-                <button onClick={() => navigate('/phase1')} className="btn btn-primary">Go to Phase 1</button>
             </div>
         )
     }
@@ -104,9 +101,19 @@ export default function Phase3({ team, setTeam }) {
             <div className="container" style={{ textAlign: 'center', padding: '60px 0' }}>
                 <div className="success-icon"><Check size={60} /></div>
                 <h2 style={{ color: '#22c55e', marginBottom: '20px' }}>Phase 3 Completed!</h2>
-                <button onClick={() => navigate(`/phase${team.currentPhase}`)} className="btn btn-primary">
-                    Continue to Phase {team.currentPhase}
-                </button>
+                <div style={{
+                    display: 'inline-block',
+                    padding: '20px 40px',
+                    background: 'rgba(255, 215, 0, 0.1)',
+                    border: '2px solid #FFD700',
+                    borderRadius: '15px',
+                    marginTop: '20px'
+                }}>
+                    <p style={{ color: '#FFD700', fontFamily: 'Orbitron', fontSize: '0.85rem', marginBottom: '8px' }}>
+                        📍 NEXT LOCATION
+                    </p>
+                    <h2 style={{ fontSize: '1.5rem', margin: 0, color: '#fff' }}>Room 2101 and 2102 Labs</h2>
+                </div>
             </div>
         )
     }
@@ -116,10 +123,7 @@ export default function Phase3({ team, setTeam }) {
             <div className="container" style={{ textAlign: 'center', padding: '60px 0' }}>
                 <AlertCircle size={60} style={{ color: '#FFD700', marginBottom: '20px' }} />
                 <h2>Phase Locked</h2>
-                <p style={{ marginBottom: '30px' }}>Complete Phase {team.currentPhase} first.</p>
-                <button onClick={() => navigate(`/phase${team.currentPhase}`)} className="btn btn-primary">
-                    Go to Phase {team.currentPhase}
-                </button>
+                <p>Complete the previous phase first.</p>
             </div>
         )
     }
@@ -208,9 +212,24 @@ export default function Phase3({ team, setTeam }) {
 
                 <div style={{ textAlign: 'center', marginTop: '40px' }}>
                     {results.passed ? (
-                        <button onClick={() => navigate('/phase4')} className="btn btn-primary btn-large">
-                            Proceed to Phase 4 <ArrowRight size={20} />
-                        </button>
+                        <>
+                            <div style={{
+                                display: 'inline-block',
+                                padding: '20px 40px',
+                                background: 'rgba(255, 215, 0, 0.1)',
+                                border: '2px solid #FFD700',
+                                borderRadius: '15px',
+                                marginTop: '20px',
+                                marginBottom: '20px'
+                            }}>
+                                <p style={{ color: '#FFD700', fontFamily: 'Orbitron', fontSize: '0.85rem', marginBottom: '8px' }}>
+                                    NEXT LOCATION
+                                </p>
+                                <h2 style={{ fontSize: '1.5rem', margin: 0, color: '#fff' }}>Room 2101 and 2102 Labs</h2>
+                            </div>
+                            <br />
+                            <p style={{ color: '#FFD700', fontSize: '1.1rem' }}>Scan the next QR code to continue.</p>
+                        </>
                     ) : (
                         <div style={{ marginTop: '20px' }}>
                             <p style={{ color: '#ef4444', marginBottom: '15px' }}>

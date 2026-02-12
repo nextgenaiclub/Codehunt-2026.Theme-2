@@ -1,11 +1,9 @@
 import { useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { MapPin, Check, AlertCircle, Upload, Trophy, Clock, X } from 'lucide-react'
 import Confetti from 'react-confetti'
 import { API_URL } from '../App'
 
 export default function Phase6({ team, setTeam }) {
-    const navigate = useNavigate()
     const fileInputRef = useRef(null)
     const [photo, setPhoto] = useState(null)
     const [photoPreview, setPhotoPreview] = useState(null)
@@ -22,7 +20,6 @@ export default function Phase6({ team, setTeam }) {
             <div className="container" style={{ textAlign: 'center', padding: '60px 0' }}>
                 <AlertCircle size={60} style={{ color: '#FFD700', marginBottom: '20px' }} />
                 <h2>Please Register First</h2>
-                <button onClick={() => navigate('/phase1')} className="btn btn-primary">Go to Phase 1</button>
             </div>
         )
     }
@@ -34,9 +31,19 @@ export default function Phase6({ team, setTeam }) {
                 <div className="trophy-icon">🏆</div>
                 <h1 style={{ marginBottom: '20px' }}>Congratulations!</h1>
                 <h2 style={{ color: '#fff', marginBottom: '30px' }}>You've completed CodeHunt-2026!</h2>
-                <button onClick={() => navigate('/leaderboard')} className="btn btn-primary btn-large">
-                    View Leaderboard
-                </button>
+                <div style={{
+                    display: 'inline-block',
+                    padding: '20px 40px',
+                    background: 'rgba(255, 215, 0, 0.1)',
+                    border: '2px solid #FFD700',
+                    borderRadius: '15px',
+                    marginTop: '20px'
+                }}>
+                    <p style={{ color: '#FFD700', fontFamily: 'Orbitron', fontSize: '0.85rem', marginBottom: '8px' }}>
+                        📍 FINAL LOCATION
+                    </p>
+                    <h2 style={{ fontSize: '1.5rem', margin: 0, color: '#fff' }}>Basketball Court Area</h2>
+                </div>
             </div>
         )
     }
@@ -46,9 +53,7 @@ export default function Phase6({ team, setTeam }) {
             <div className="container" style={{ textAlign: 'center', padding: '60px 0' }}>
                 <AlertCircle size={60} style={{ color: '#FFD700', marginBottom: '20px' }} />
                 <h2>Phase Locked</h2>
-                <button onClick={() => navigate(`/phase${team.currentPhase}`)} className="btn btn-primary">
-                    Go to Phase {team.currentPhase}
-                </button>
+                <p>Complete the previous phase first.</p>
             </div>
         )
     }
@@ -80,10 +85,6 @@ export default function Phase6({ team, setTeam }) {
     }
 
     const handleSubmit = async () => {
-        if (!photo) {
-            setError('Please upload a team photo')
-            return
-        }
         if (!location.trim()) {
             setError('Please enter the location you found')
             return
@@ -92,15 +93,14 @@ export default function Phase6({ team, setTeam }) {
         setLoading(true)
         setError('')
 
-        const formData = new FormData()
-        formData.append('photo', photo)
-        formData.append('teamId', team.teamId)
-        formData.append('locationAnswer', location)
-
         try {
             const res = await fetch(`${API_URL}/phase6/submit`, {
                 method: 'POST',
-                body: formData
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    teamId: team.teamId,
+                    locationAnswer: location
+                })
             })
             const data = await res.json()
 
@@ -144,9 +144,23 @@ export default function Phase6({ team, setTeam }) {
                     Congratulations Team {finalData.teamName}!
                 </h1>
 
-                <p style={{ fontSize: '1.3rem', color: '#fff', marginBottom: '40px' }}>
+                <p style={{ fontSize: '1.3rem', color: '#fff', marginBottom: '20px' }}>
                     You have successfully completed <span style={{ color: '#FFD700' }}>CodeHunt-2026</span>!
                 </p>
+
+                <div style={{
+                    display: 'inline-block',
+                    padding: '20px 40px',
+                    background: 'rgba(255, 215, 0, 0.1)',
+                    border: '2px solid #FFD700',
+                    borderRadius: '15px',
+                    marginBottom: '30px'
+                }}>
+                    <p style={{ color: '#FFD700', fontFamily: 'Orbitron', fontSize: '0.85rem', marginBottom: '8px' }}>
+                        📍 FINAL LOCATION
+                    </p>
+                    <h2 style={{ fontSize: '1.5rem', margin: 0, color: '#fff' }}>Basketball Court Area</h2>
+                </div>
 
                 <div style={{
                     display: 'inline-block',
@@ -187,12 +201,6 @@ export default function Phase6({ team, setTeam }) {
                 <div style={{
                     display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap'
                 }}>
-                    <button onClick={() => navigate('/leaderboard')} className="btn btn-primary btn-large">
-                        <Trophy size={20} /> View Leaderboard
-                    </button>
-                    <button onClick={() => navigate('/')} className="btn btn-secondary btn-large">
-                        Back to Home
-                    </button>
                 </div>
 
                 <div style={{ marginTop: '60px' }}>
@@ -228,12 +236,14 @@ export default function Phase6({ team, setTeam }) {
                 </p>
             </div>
 
-            {/* Upload Section */}
+            {/* Final Task Section */}
             <div className="card" style={{ marginBottom: '30px' }}>
                 <h3 style={{ marginBottom: '20px' }}>
-                    <Upload size={20} style={{ marginRight: '10px' }} />
-                    Upload Team Photo
+                    <MapPin size={20} style={{ marginRight: '10px' }} />
+                    Final Task: Locate & Capture
                 </h3>
+
+
 
                 {error && (
                     <div style={{
@@ -248,37 +258,49 @@ export default function Phase6({ team, setTeam }) {
                     </div>
                 )}
 
-                {!photoPreview ? (
-                    <div
-                        className={`upload-zone ${dragOver ? 'dragover' : ''}`}
-                        onClick={() => fileInputRef.current?.click()}
-                        onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
-                        onDragLeave={() => setDragOver(false)}
-                        onDrop={handleDrop}
-                    >
-                        <div className="upload-zone-icon">📷</div>
-                        <p className="upload-zone-text">Drop your team photo here or click to browse</p>
-                        <p className="upload-zone-hint">Accepts .jpg, .jpeg, .png (max 5MB)</p>
+                {team.phase1?.driveLink ? (
+                    <div style={{
+                        padding: '20px',
+                        background: 'rgba(66, 133, 244, 0.1)',
+                        border: '1px dashed #4285F4',
+                        borderRadius: '12px',
+                        marginBottom: '20px',
+                        textAlign: 'center'
+                    }}>
+                        <div style={{ fontSize: '2rem', marginBottom: '10px' }}>📂</div>
+                        <h4 style={{ color: '#8ab4f8', marginBottom: '10px' }}>
+                            Upload to Drive Folder
+                        </h4>
+                        <p style={{ fontSize: '1rem', marginBottom: '15px', color: '#e0e0e0', lineHeight: '1.5' }}>
+                            Upload your team photo at the location directly to your Google Drive folder.
+                        </p>
+                        <a
+                            href={team.phase1.driveLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn"
+                            style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                background: '#4285F4',
+                                color: 'white',
+                                border: 'none',
+                                textDecoration: 'none',
+                                padding: '10px 20px',
+                                borderRadius: '6px',
+                                fontSize: '0.9rem',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            Open Drive Folder <span style={{ fontSize: '1.2em' }}>↗</span>
+                        </a>
                     </div>
                 ) : (
-                    <div className="upload-preview">
-                        <img src={photoPreview} alt="Team photo preview" />
-                        <button
-                            className="upload-preview-remove"
-                            onClick={() => { setPhoto(null); setPhotoPreview(null) }}
-                        >
-                            <X size={18} />
-                        </button>
+                    <div style={{ padding: '20px', textAlign: 'center', color: '#aaa', border: '1px dashed #666', borderRadius: '8px', marginBottom: '20px' }}>
+                        <p>Drive link not found.</p>
                     </div>
                 )}
-
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".jpg,.jpeg,.png"
-                    onChange={(e) => handleFileSelect(e.target.files[0])}
-                    style={{ display: 'none' }}
-                />
             </div>
 
             {/* Location Input */}
