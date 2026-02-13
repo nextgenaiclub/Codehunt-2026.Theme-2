@@ -343,37 +343,37 @@ const phase2Questions = [
 const phase3Questions = [
     {
         id: 1,
-        code: `#iclude <stdio.h>\nint main() {\n    float result = (5 + 3 * 2;\n    printf("%d", result);\n    return 0;\n}`,
-        question: "What will be the correct output after fixing all errors?",
-        options: ["16.000000", "11.000000", "11", "Error"],
+        code: `#include <stdio.h>\nint main() {\n    int i, sum = 0;\n    for (i = 1; i <= 5; i++) {\n        if (i % 2 == 0)\n            continue;\n        sum += i;\n    }\n    printf("%d", sum);\n    return 0;\n}`,
+        question: "What will be the output of this code?",
+        options: ["6", "9", "15", "10"],
         correctAnswer: 1
     },
     {
         id: 2,
-        code: `#include <stdio.h>\nint main() {\n    double x = 110.9807;\n    prinf("Value: %f", x);\n    return 0;\n}`,
-        question: "What will be the correct output after fixing all errors?",
-        options: ["Value: 110.9807", "Value: 110.980700", "110.980700", "Error"],
-        correctAnswer: 1
+        code: `#include <stdio.h>\nint main() {\n    int a = 5, b = 10;\n    int *p = &a, *q = &b;\n    *p = *q;\n    *q = a;\n    printf("%d %d", a, b);\n    return 0;\n}`,
+        question: "What will be the output of this code?",
+        options: ["5 10", "10 5", "10 10", "5 5"],
+        correctAnswer: 2
     },
     {
         id: 3,
-        code: `#include <stdio.h>\nint main() [\n    int x = 5\n    printf("%d", x);\n    return 0;\n}`,
-        question: "What will be the correct output after fixing all errors?",
-        options: ["0", "5", "x", "Error"],
-        correctAnswer: 1
+        code: `#include <stdio.h>\nint fun(int n) {\n    if (n == 0)\n        return 0;\n    return n % 10 + fun(n / 10);\n}\nint main() {\n    printf("%d", fun(1234));\n    return 0;\n}`,
+        question: "What will be the output of this code?",
+        options: ["1234", "4321", "10", "24"],
+        correctAnswer: 2
     },
     {
         id: 4,
-        code: `#include <stdio.h>\nint main() {\n    int n, i;\n    printf("Enter number: ");\n    scanf("%d", &n)\n    for(i = 1; i <= 10; i++) {\n    printf("%d x %d = %d\\n", n, i, n*i);\n    return 0;\n}`,
-        question: "How many errors need to be fixed in this code?",
-        options: ["1", "2", "3", "4"],
+        code: `#include <stdio.h>\nint main() {\n    int arr[] = {1, 2, 3, 4, 5};\n    int *ptr = arr;\n    printf("%d ", *(ptr + 2));\n    ptr++;\n    printf("%d ", *(ptr + 2));\n    return 0;\n}`,
+        question: "What will be the output of this code?",
+        options: ["2 4", "3 5", "3 4", "1 3"],
         correctAnswer: 1
     },
     {
         id: 5,
-        code: `#include <studio.h>\nint main() {\n    int a = 10, b = 20, sum;\n    sum = a + b\n    printf("Sum = %d", sum);\n    retrn 0;\n}`,
-        question: "What will be the correct output after fixing all errors?",
-        options: ["Sum = 10", "Sum = 20", "Sum = 30", "Error"],
+        code: `#include <stdio.h>\nint main() {\n    int x = 1;\n    switch (x) {\n        case 1: printf("A");\n        case 2: printf("B");\n        case 3: printf("C");\n                break;\n        default: printf("D");\n    }\n    return 0;\n}`,
+        question: "What will be the output of this code?",
+        options: ["A", "AB", "ABC", "ABCD"],
         correctAnswer: 2
     }
 ];
@@ -382,19 +382,25 @@ const phase3Questions = [
 const phase4Code = `#include <stdio.h>
 
 int main() {
-    int num = 100;
+    int arr[5] = {10, 20, 30, 40, 50};
+    int *ptr = arr;
+    int sum = 0, i;
 
-    if (num = 100) {
-        printf("Matched")
+    for (i = 0; i < 5; i++) {
+        if (i % 2 = 0) {
+            sum += *(ptr + i)
+        }
     }
 
-    retrn 0;
+    print("Sum of even-indexed: %d", sum);
+    retrun 0;
 }`;
 
 const phase4Hints = [
-    "Look at the if condition - is it comparing or assigning?",
-    "Check for missing semicolons after printf",
-    "Is 'retrn' a valid keyword?"
+    "Look carefully at the if condition - is '=' used for comparison?",
+    "Check for missing semicolons inside the loop body",
+    "Are 'print' and 'retrun' valid C keywords?",
+    "Even-indexed elements are arr[0], arr[2], arr[4] = 10, 30, 50"
 ];
 
 // Phase 5 Riddles - 1st Year Engineering Level
@@ -763,7 +769,9 @@ app.post('/api/phase4/submit', async (req, res) => {
         }
 
         const attempts = (team.phase4?.attempts || 0) + 1;
-        const isCorrect = answer && answer.trim().toLowerCase() === 'matched';
+        const correctAnswer = 'sum of even-indexed: 90';
+        const userAnswer = answer ? answer.trim().toLowerCase() : '';
+        const isCorrect = userAnswer === correctAnswer || userAnswer === '90';
 
         if (isCorrect) {
             await saveTeam(teamId, {
