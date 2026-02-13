@@ -18,6 +18,7 @@ function App() {
     const saved = localStorage.getItem('codehunt_team')
     return saved ? JSON.parse(saved) : null
   })
+  const [syncing, setSyncing] = useState(true)
 
   useEffect(() => {
     if (team) {
@@ -34,8 +35,22 @@ function App() {
           if (data) setTeam(data)
         })
         .catch(() => {})
+        .finally(() => setSyncing(false))
+    } else {
+      setSyncing(false)
     }
   }, [])
+
+  if (syncing) {
+    return (
+      <Layout team={team}>
+        <div className="container" style={{ textAlign: 'center', padding: '60px 0' }}>
+          <div className="spinner" />
+          <p>Loading...</p>
+        </div>
+      </Layout>
+    )
+  }
 
   return (
     <Layout team={team}>
