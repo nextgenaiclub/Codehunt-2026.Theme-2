@@ -270,63 +270,63 @@ async function getStats() {
 const phase2Questions = [
     {
         id: 1,
-        question: "Which algorithm technique solves problems by breaking them into subproblems?",
-        options: ["Divide and Conquer", "Random Search", "Greedy Avoidance", "Brute Force"],
+        question: "Generative AI is best described as AI that:",
+        options: ["Creates new content", "Deletes information", "Only analyzes data", "Compresses files"],
         correctAnswer: 0
     },
     {
         id: 2,
-        question: "Which data structure uses FIFO?",
-        options: ["Heap", "Queue", "Graph", "Stack"],
-        correctAnswer: 1
-    },
-    {
-        id: 3,
-        question: "What does CPU stand for?",
-        options: ["Control Program Utility", "Computer Personal Unit", "Central Processing Unit", "Central Process Unit"],
+        question: "Which model architecture powers many modern text generators?",
+        options: ["Binary Trees", "Hash Tables", "Transformers", "Bubble Sort"],
         correctAnswer: 2
     },
     {
-        id: 4,
-        question: "Which sorting algorithm has average complexity O(n log n)?",
-        options: ["Selection Sort", "Bubble Sort", "Insertion Sort", "Merge Sort"],
+        id: 3,
+        question: "What is a \"prompt\" in generative AI?",
+        options: ["Storage device", "Hardware chip", "Antivirus software", "Input instruction given to the AI"],
         correctAnswer: 3
     },
     {
-        id: 5,
-        question: "What is the binary representation of decimal 10?",
-        options: ["1110", "1010", "1001", "1100"],
+        id: 4,
+        question: "GAN stands for:",
+        options: ["Graphical AI Node", "Generative Adversarial Network", "General Algorithm Network", "Global Access Network"],
         correctAnswer: 1
     },
     {
-        id: 6,
-        question: "Which layer of the OSI model handles routing?",
-        options: ["Network", "Transport", "Session", "Presentation"],
-        correctAnswer: 0
+        id: 5,
+        question: "Which is a common use of generative AI in business?",
+        options: ["Increasing paperwork", "Turning off servers", "Automated content creation", "Manual bookkeeping"],
+        correctAnswer: 2
     },
     {
-        id: 7,
-        question: "A primary key must be:",
-        options: ["Repeated", "Optional", "Encrypted", "Unique"],
+        id: 6,
+        question: "Deepfakes are created using:",
+        options: ["Spreadsheet formulas", "Firewalls", "Rule-based coding only", "AI-generated synthetic media"],
         correctAnswer: 3
     },
     {
+        id: 7,
+        question: "One benefit of generative AI in design is:",
+        options: ["Rapid idea generation", "Eliminating creativity", "Slower prototyping", "Increasing cost always"],
+        correctAnswer: 0
+    },
+    {
         id: 8,
-        question: "Which language is primarily used for web page structure?",
-        options: ["Python", "C++", "HTML", "Java"],
+        question: "Which issue arises from AI-generated art?",
+        options: ["Low battery", "Lack of internet", "Copyright and ownership concerns", "Keyboard failure"],
         correctAnswer: 2
     },
     {
         id: 9,
-        question: "What is recursion?",
-        options: ["Memory deletion", "Parallel computing", "Loop unrolling", "Function calling itself"],
-        correctAnswer: 3
+        question: "Text-to-image models convert:",
+        options: ["Audio into spreadsheets", "Videos into text only", "Text descriptions into visuals", "Images into code"],
+        correctAnswer: 2
     },
     {
         id: 10,
-        question: "Which memory is volatile?",
-        options: ["Hard Disk", "RAM", "SSD", "ROM"],
-        correctAnswer: 1
+        question: "Temperature in text generation controls:",
+        options: ["Screen brightness", "Hardware heat", "Download speed", "Randomness of output"],
+        correctAnswer: 3
     }
 ];
 
@@ -334,64 +334,63 @@ const phase2Questions = [
 const phase3Questions = [
     {
         id: 1,
-        code: `#include <stdio.h>\nint main() {\n    int i, sum = 0;\n    for (i = 1; i <= 5; i++) {\n        if (i % 2 == 0)\n            continue;\n        sum += i;\n    }\n    printf("%d", sum);\n    return 0;\n}`,
+        code: `#include <stdio.h>\nint main() {\n    int a = 3, b = 5;\n    int c = ++a + b++;\n    printf("%d %d %d", a, b, c);\n    return 0;\n}`,
         question: "What will be the output of this code?",
-        options: ["6", "9", "15", "10"],
+        options: ["3 5 8", "4 6 9", "4 6 8", "3 6 8"],
         correctAnswer: 1
     },
     {
         id: 2,
-        code: `#include <stdio.h>\nint main() {\n    int a = 5, b = 10;\n    int *p = &a, *q = &b;\n    *p = *q;\n    *q = a;\n    printf("%d %d", a, b);\n    return 0;\n}`,
+        code: `#include <stdio.h>\nint fib(int n) {\n    if (n <= 1) return n;\n    return fib(n - 1) + fib(n - 2);\n}\nint main() {\n    printf("%d", fib(7));\n    return 0;\n}`,
         question: "What will be the output of this code?",
-        options: ["5 10", "10 5", "10 10", "5 5"],
-        correctAnswer: 2
-    },
-    {
-        id: 3,
-        code: `#include <stdio.h>\nint fun(int n) {\n    if (n == 0)\n        return 0;\n    return n % 10 + fun(n / 10);\n}\nint main() {\n    printf("%d", fun(1234));\n    return 0;\n}`,
-        question: "What will be the output of this code?",
-        options: ["1234", "4321", "10", "24"],
-        correctAnswer: 2
-    },
-    {
-        id: 4,
-        code: `#include <stdio.h>\nint main() {\n    int arr[] = {1, 2, 3, 4, 5};\n    int *ptr = arr;\n    printf("%d ", *(ptr + 2));\n    ptr++;\n    printf("%d ", *(ptr + 2));\n    return 0;\n}`,
-        question: "What will be the output of this code?",
-        options: ["2 4", "3 5", "3 4", "1 3"],
+        options: ["8", "13", "21", "34"],
         correctAnswer: 1
     },
     {
-        id: 5,
-        code: `#include <stdio.h>\nint main() {\n    int x = 1;\n    switch (x) {\n        case 1: printf("A");\n        case 2: printf("B");\n        case 3: printf("C");\n                break;\n        default: printf("D");\n    }\n    return 0;\n}`,
+        id: 3,
+        code: `#include <stdio.h>\nint main() {\n    int x = 3;\n    switch (x) {\n        case 1: printf("One ");\n        case 2: printf("Two ");\n        case 3: printf("Three ");\n        case 4: printf("Four ");\n                break;\n        default: printf("None");\n    }\n    return 0;\n}`,
         question: "What will be the output of this code?",
-        options: ["A", "AB", "ABC", "ABCD"],
+        options: ["Three Four", "Three", "One Two Three Four", "None"],
+        correctAnswer: 0
+    },
+    {
+        id: 4,
+        code: `#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr + 2;\n    printf("%d ", *p);\n    printf("%d ", *(p - 1));\n    printf("%d", *(p + 2));\n    return 0;\n}`,
+        question: "What will be the output of this code?",
+        options: ["20 10 40", "30 10 50", "30 20 50", "20 30 50"],
         correctAnswer: 2
+    },
+    {
+        id: 5,
+        code: `#include <stdio.h>\nint main() {\n    char str[] = "GenerativeAI";\n    int upper = 0, lower = 0, i;\n    for (i = 0; str[i] != '\\0'; i++) {\n        if (str[i] >= 'A' && str[i] <= 'Z') upper++;\n        else if (str[i] >= 'a' && str[i] <= 'z') lower++;\n    }\n    printf("%d %d", upper, lower);\n    return 0;\n}`,
+        question: "What will be the output of this code?",
+        options: ["2 10", "3 9", "2 9", "3 10"],
+        correctAnswer: 0
     }
 ];
 
 // Phase 4 Buggy Code
 const phase4Code = `#include <stdio.h>
 
+int factorial(int n) {
+    if (n = 0)
+        return 1;
+    else
+        return n * factorial(n - 1)
+}
+
 int main() {
-    int arr[5] = {10, 20, 30, 40, 50};
-    int *ptr = arr;
-    int sum = 0, i;
-
-    for (i = 0; i < 5; i++) {
-        if (i % 2 = 0) {
-            sum += *(ptr + i)
-        }
-    }
-
-    print("Sum of even-indexed: %d", sum);
-    retrun 0;
+    int num = 5;
+    int result = factorial(num);
+    prinft("Factorial of %d: %d\\n", num, result);
+    return 0;
 }`;
 
 const phase4Hints = [
-    "Look carefully at the if condition - is '=' used for comparison?",
-    "Check for missing semicolons inside the loop body",
-    "Are 'print' and 'retrun' valid C keywords?",
-    "Even-indexed elements are arr[0], arr[2], arr[4] = 10, 30, 50"
+    "Look at the base case condition — is '=' the right operator for comparison?",
+    "Check for a missing semicolon at the end of the recursive return statement",
+    "Is 'prinft' a valid C function? Check the function name carefully",
+    "Factorial of 5 = 5 × 4 × 3 × 2 × 1 = 120"
 ];
 
 // Phase 5 Riddles - 3 Challenges (ALL required to pass)
@@ -399,34 +398,130 @@ const phase5Riddles = [
     {
         id: 1,
         type: "mcq",
-        riddle: "Study the maze below and find the ONLY path from S (Start) to E (Exit). Walls (#) block movement. You can only move Right (→) or Down (↓).\n\n    C0  C1  C2  C3  C4  C5\nR0: [S] [.] [#] [.] [.] [.]\nR1: [#] [.] [.] [.] [#] [.]\nR2: [#] [#] [#] [.] [.] [.]\nR3: [.] [.] [#] [#] [#] [.]\nR4: [#] [.] [.] [.] [#] [.]\nR5: [#] [#] [#] [.] [.] [E]\n\nWhich sequence of moves leads from S to E?",
+        riddle: "Study the maze below and find the ONLY path from S (Start) to E (Exit). Walls (#) block movement. You can only move Right (→) or Down (↓).\n\n    C0  C1  C2  C3  C4  C5\nR0: [S] [.] [#] [.] [.] [.]\nR1: [#] [.] [#] [#] [.] [.]\nR2: [#] [.] [.] [.] [#] [.]\nR3: [.] [#] [.] [#] [.] [#]\nR4: [#] [.] [#] [#] [.] [.]\nR5: [#] [#] [#] [#] [.] [E]\n\nWhich sequence of moves leads from S to E?",
         options: [
-            "→ ↓ → → ↓ ↓ → → ↓ ↓",
-            "→ ↓ → → ↓ → → ↓ ↓ ↓",
+            "→ ↓ ↓ → → ↓ ↓ → ↓ →",
+            "→ ↓ ↓ → → ↓ → ↓ ↓ →",
             "→ ↓ → ↓ → → ↓ ↓ → ↓",
-            "→ ↓ → → ↓ → ↓ → ↓ ↓"
+            "↓ → → ↓ → ↓ → ↓ ↓ →"
         ],
         correctAnswer: 1
     },
     {
         id: 2,
         type: "mcq",
-        riddle: "LOGICAL DEDUCTION: Each CS Module is assigned exactly one function.\n\nCS Modules:\n  1. AlgoCore\n  2. DataNest\n  3. LogicFlow\n  4. ByteWorks\n\nFunctions:\n  A. Algorithms\n  B. Data Structures\n  C. Memory Management\n  D. Control Flow\n\nClues:\n  • DataNest (2) is assigned to Control Flow (D)\n  • AlgoCore (1) is assigned to Data Structures (B)\n  • ByteWorks (4) is NOT assigned to B or D\n  • LogicFlow (3) is assigned to Algorithms (A)\n\nWhat is the correct mapping?",
+        riddle: "LOGICAL DEDUCTION: Each Generative AI Tool is assigned exactly one Creative Function.\n\nAI Tools:\n  1. ArtForge\n  2. Promptly\n  3. VisionCrafter\n  4. StoryWeave\n\nCreative Functions:\n  A. Image Generation\n  B. Text Generation\n  C. Video Creation\n  D. Prompt Engineering\n\nClues:\n  • Promptly (2) is assigned to Prompt Engineering (D)\n  • ArtForge (1) is assigned to Image Generation (A)\n  • StoryWeave (4) is NOT assigned to A or D\n  • VisionCrafter (3) is NOT assigned to B\n\nWhat is the correct mapping?",
         options: [
-            "AlgoCore→A, DataNest→D, LogicFlow→B, ByteWorks→C",
-            "AlgoCore→B, DataNest→D, LogicFlow→A, ByteWorks→C",
-            "AlgoCore→B, DataNest→C, LogicFlow→A, ByteWorks→D",
-            "AlgoCore→C, DataNest→D, LogicFlow→A, ByteWorks→B"
+            "ArtForge→A, Promptly→D, VisionCrafter→B, StoryWeave→C",
+            "ArtForge→A, Promptly→D, VisionCrafter→C, StoryWeave→B",
+            "ArtForge→B, Promptly→D, VisionCrafter→C, StoryWeave→A",
+            "ArtForge→A, Promptly→C, VisionCrafter→D, StoryWeave→B"
         ],
         correctAnswer: 1
     },
     {
         id: 3,
         type: "text",
-        riddle: "PATTERN RECOGNITION\n\nStep 1 — Given Values:\n  A = 5,  B = 4,  C = 3,  D = 6\n\nStep 2 — Solve these expressions in order:\n  1) (3 × D) + 1\n  2) (4 × A)\n  3) (B − 3)\n  4) (2 × A) + 4\n  5) (C + 1)\n  6) (1 × A)\n  7) (1 × A)\n\nStep 3 — Convert each result to a letter using A1–Z26\n  (A=1, B=2, C=3 ... Z=26)\n\nWhat is the decoded keyword?",
-        acceptedAnswers: ["standee", "STANDEE", "Standee"]
+        riddle: "PATTERN RECOGNITION\n\nStep 1 — Given Values:\n  A = 8,  B = 5,  C = 6,  D = 10\n\nStep 2 — Solve these expressions in order:\n  1) (2 × D) − 6\n  2) (1 × B)\n  3) (4 × C)\n  4) (4 × A) − 12\n  5) (1 × C) + 1\n  6) (1 × B)\n  7) (2 × D) − 6\n\nStep 3 — Convert each result to a letter using A1–Z26\n  (A=1, B=2, C=3 ... Z=26)\n\nWhat is the decoded keyword?",
+        acceptedAnswers: ["nextgen", "NEXTGEN", "NextGen"]
     }
 ];
+
+// ============================================
+// LOCATION RIDDLES (shown after each phase completes)
+// Stage 1 (after Phase 1) → Basketball Court
+// Stage 2 (after Phase 2) → Eco Campus Wall
+// Stage 3 (after Phase 3) → Main Canteen
+// Stage 4 (after Phase 4) → Lab 2101 & 2012
+// Stage 5 (after Phase 5) → VU 7th Building
+// Stage 6 (after Phase 6) → VU 2nd Building (Final)
+// ============================================
+const locationRiddles = {
+    1: {
+        stage: 1,
+        location: "Basketball Court",
+        english: `One ball, one hoop, one place to score,
+Echoes of bounce on the open floor.
+No nets of books, just aim and run,
+Find the code where the matches are won.`,
+        hinglish: `Ek ball, ek hoop, ek hi court,
+Bounce ki awaaz ka hota hai report.
+Books nahi, bas focus aur shot,
+Game wali jagah pe milega next plot.`
+    },
+    2: {
+        stage: 2,
+        location: "Eco Campus Wall – 1st Building – After the Slope – Main Logo",
+        english: `Walk past the slope, take a steady climb,
+Where green ideas met management in time.
+A wall that shows the campus name,
+Look near the symbol of college fame.`,
+        hinglish: `Slope cross karke thoda aage jao,
+Management aur eco ka combo pao.
+Deewar pe jahan college ka sign,
+Logo ke paas milega tumhara next line.`
+    },
+    3: {
+        stage: 3,
+        location: "Main Canteen – Near Building 4",
+        english: `When hunger hits and crowds collide,
+The biggest food stop stands with pride.
+Near the number four, always alive,
+Plates and plans here truly thrive.`,
+        hinglish: `Jab bhookh lage aur crowd ho tight,
+Sabse badi canteen stays in sight.
+Four ke paas jo hamesha alive,
+Khana aur clues dono yahin survive.`
+    },
+    4: {
+        stage: 4,
+        location: "Lab 2101 & Lab 2012 – CS Lab",
+        english: [
+            `Climb one level, logic gets strong,
+Screens glow bright where coders belong.
+Syntax speaks, machines align,
+First floor hides the next design. (Lab 2101 – First Floor)`,
+            `From ground you start the digital race,
+Keyboards click in a focused space.
+Where systems run and minds compile,
+The lower lab hides the next file. (Lab 2012 – Ground Floor)`
+        ],
+        hinglish: [
+            `Ek floor upar, logic on fire,
+Screens aur code ka perfect choir.
+CS ka adda, focus lab divine,
+First floor pe milega next sign. (Lab 2101 – First Floor)`,
+            `Zameen se shuru hota coding ka track,
+Keyboard ki awaaz, full focus mode on pack.
+Neeche wale lab mein dimag align,
+Ground floor pe milega agla sign. (Lab 2012 – Ground Floor)`
+        ]
+    },
+    5: {
+        stage: 5,
+        location: "VU 7th Building – Law Building – Fire Extinguisher",
+        english: `Where rules are read and justice taught,
+The number seven matters more than you thought.
+Safety stands silent, red and bright,
+Check just behind to find your next light.`,
+        hinglish: `Kanoon ki baatein, rules ka scene,
+Seven ka number makes it clean.
+Red safety guard jo corner mein khada,
+Uske peeche hi raaz hai pada.`
+    },
+    6: {
+        stage: 6,
+        location: "VU 2nd Building – Ground Floor – Under a Plant (Engg + Pharmacy)",
+        english: `Where campus paths cross, both science minds unite,
+Engineers and pharma learn from morning till night.
+On the ground where green leaves quietly chant,
+Look down below, resting under a plant.`,
+        hinglish: `Campus ke center mein jahan sabka flow hai,
+Engineer aur pharma ka common show hai.
+Neeche zameen par hariyali ka hint,
+Ped ke neeche chhupa hai agla print.`
+    }
+};
 
 // ============================================
 // API ROUTES
@@ -788,9 +883,9 @@ app.post('/api/phase4/submit', async (req, res) => {
             return res.status(400).json({ error: 'Phase 4 already completed' });
         }
 
-        const correctAnswer = 'sum of even-indexed: 90';
+        const correctAnswer = 'factorial of 5: 120';
         const userAnswer = answer ? answer.trim().toLowerCase() : '';
-        const isCorrect = userAnswer === correctAnswer || userAnswer === '90';
+        const isCorrect = userAnswer === correctAnswer || userAnswer === '120';
 
         if (isCorrect) {
             await saveTeam(teamId, {
@@ -805,8 +900,8 @@ app.post('/api/phase4/submit', async (req, res) => {
             return res.json({
                 success: true,
                 correct: true,
-                message: 'Correct! The next treasure is at Room 2012!',
-                room: '2012'
+                message: 'Correct! Head to the CS Labs to find the next clue!',
+                room: '2101/2012'
             });
         }
 
@@ -968,6 +1063,21 @@ app.post('/api/phase6/submit', upload.none(), async (req, res) => {
         console.error('Phase 6 submit error:', error.message);
         res.status(500).json({ error: 'Server error: ' + error.message });
     }
+});
+
+// ============================================
+// LOCATION RIDDLE ENDPOINT
+// ============================================
+
+// Get location riddle for a given stage (1–6)
+// stage 1 = shown after Phase 1, stage 2 after Phase 2, etc.
+app.get('/api/location-riddle/:stage', (req, res) => {
+    const stage = parseInt(req.params.stage);
+    if (!stage || stage < 1 || stage > 6) {
+        return res.status(400).json({ error: 'Invalid stage. Must be 1–6.' });
+    }
+    const riddle = locationRiddles[stage];
+    res.json({ success: true, riddle });
 });
 
 // Get leaderboard
